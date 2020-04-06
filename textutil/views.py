@@ -15,28 +15,39 @@ def analyze(request):
     removespace = request.POST.get('removespace', 'off')
     countchar = request.POST.get('countchar', 'off')
     countword = request.POST.get('countword', 'off')
-    analyzed = " "
+    analyzed = djtext
 
     if removepunc == 'on':
-        puncs = '''~!@#$%^&*(),./<-_>?:""{}|;''[]\='''
+        puncs = ''''~!@#$%^&*(),./<-_>?:""{}|;''[]\='''
+        djtext=analyzed
+        analyzed=""
         for char in djtext:
             if char not in puncs:
                 analyzed += char
 
-    elif (fullcaps == 'on'):
+    if (fullcaps == 'on'):
+        djtext=analyzed
+        analyzed=""
         for char in djtext:
             analyzed+=char.upper()
 
-    elif (removespace == 'on'):
+    if (removespace == 'on'):
+        djtext=analyzed
+        analyzed=""
         for idx,char in enumerate(djtext):
             if not (djtext[idx] == " " and djtext[idx+1] == " "):
                 analyzed += char
 
-    elif (countchar == 'on'):
-        analyzed='Total Characters : '+str(len(djtext))
+    djtext=analyzed
+    if (countchar == 'on'):
+        analyzed += '\nTotal Characters : '+str(len(djtext))
 
-    elif (countword == 'on'):
-        analyzed = 'Total Words : '+str(djtext.count(' '))
+    if (countword == 'on'):
+        spaces=0
+        for i in range(len(djtext)-1):
+            if djtext[i]==' ' and djtext[i+1]!=' ':
+                spaces+=1
+        analyzed += '\nTotal Words : '+str(spaces+1)
     
     param = {'purpose' : 'Remove Punctuations', 'analyzed_text': analyzed}
     return render(request, 'analyze.html', param)
