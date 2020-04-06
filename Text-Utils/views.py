@@ -9,12 +9,12 @@ def index(request):
 
 def analyze(request):
     # get the text
-    djtext = request.GET.get('intext', 'default')
-    removepunc = request.GET.get('removepunc', 'off')
-    fullcaps = request.GET.get('fullcaps', 'off')
-    removespace = request.GET.get('removespace', 'off')
-    countchar = request.GET.get('countchar', 'off')
-    countword = request.GET.get('countword', 'off')
+    djtext = request.POST.get('intext', 'default')
+    removepunc = request.POST.get('removepunc', 'off')
+    fullcaps = request.POST.get('fullcaps', 'off')
+    removespace = request.POST.get('removespace', 'off')
+    countchar = request.POST.get('countchar', 'off')
+    countword = request.POST.get('countword', 'off')
     analyzed = " "
 
     if removepunc == 'on':
@@ -37,7 +37,7 @@ def analyze(request):
 
     elif (countword == 'on'):
         analyzed = 'Total Words : '+str(djtext.count(' '))
-
+    
     param = {'purpose' : 'Remove Punctuations', 'analyzed_text': analyzed}
     return render(request, 'analyze.html', param)
 
